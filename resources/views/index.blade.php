@@ -10,13 +10,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <body>
     <div class="container mt-5 mb-5">
-        @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
-            <i class="fas fa-check-circle me-2"></i> {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        @endif
-
         <div class="card border-0 mx-auto" style="max-width: 700px;">
             <div class="card-header text-white text-center">
                 <h4 class="mb-0 fw-bold">Penyewaan Komponen Elektronika</h4>
@@ -25,15 +18,15 @@
                 <form action="{{ route('penyewaan.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3 form-floating">
-                        <input type="text" class="form-control" id="nama" placeholder="Nama Lengkap" name="nama" required>
+                        <input type="text" class="form-control" placeholder="Nama Lengkap" name="nama_penyewa" id="nama_penyewa" required>
                         <label for="nama"><i class="fas fa-user me-2"></i>Nama Lengkap</label>
                     </div>
                     <div class="mb-3 form-floating">
-                        <input type="text" class="form-control" id="whatsapp" placeholder="No WhatsApp" name="whatsapp" required>
+                        <input type="text" class="form-control" placeholder="No WhatsApp" name="no_penyewa" id="no_penyewa" required>
                         <label for="whatsapp"><i class="fab fa-whatsapp me-2"></i>No WhatsApp</label>
                     </div>
                     <div class="mb-4 form-floating">
-                        <textarea class="form-control" id="alamat" placeholder="Alamat Lengkap" name="alamat" style="height: 100px" required></textarea>
+                        <textarea class="form-control" placeholder="Alamat Lengkap" name="alamat_penyewa" id="alamat_penyewa" style="height: 100px" required></textarea>
                         <label for="alamat"><i class="fas fa-map-marker-alt me-2"></i>Alamat Lengkap</label>
                     </div>
 
@@ -42,39 +35,58 @@
                         <div class="accordion-item border-0 shadow-sm">
                             <h2 class="accordion-header">
                                 <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseMicrocontroller" aria-expanded="true" aria-controls="collapseMicrocontroller">
+                                    data-bs-target="#collapseMicrocontroller" aria-expanded="false" aria-controls="collapseMicrocontroller">
                                     <i class="fas fa-microchip me-2"></i> Microcontroller
                                 </button>
                             </h2>
-                            <div id="collapseMicrocontroller" class="accordion-collapse collapse show" data-bs-parent="#komponenAccordion">
+                            <div id="collapseMicrocontroller" class="accordion-collapse collapse" data-bs-parent="#komponenAccordion">
                                 <div class="accordion-body">
                                     <div class="row">
                                         <!-- Info Komponen -->
+                                        @foreach ($barangMicrocontroller as $d)
+                                        @php
+                                            $stok = $stokPerBarang[$d->id_nama_barang] ?? 0;
+                                        @endphp
                                         <div class="col-md-6 mb-3">
-                                            <span class="fw-medium d-block">Arduino UNO R3</span>
-                                            <small class="text-muted">Rp. 75.000/Minggu</small>
+                                            <span class="fw-medium d-block">{{ $d->namaBarang->nama_barang ?? '-' }}</span>
+                                            <small class="text-muted me-2">
+                                                Rp. {{ number_format($d->harga_jual_barang, 0, ',', '.') }}/Minggu
+                                            </small>
+                                            @if (!empty($d->namaBarang->deskripsi))
+                                                <a href="{{ $d->namaBarang->deskripsi }}" target="_blank" class="btn btn-sm btn-primary">
+                                                    Detail
+                                                </a>
+                                            @endif
                                         </div>
-                                        <!-- Input Jumlah & Minggu -->
                                         <div class="col-md-6">
-                                            <div class="row">
+                                            <div class="row" data-nama="{{ $d->namaBarang->nama_barang }}" data-harga="{{ $d->harga_jual_barang }}" data-stok="{{ $stok }}">
                                                 <div class="col-md-6 mb-3">
                                                     <label class="form-label small">Jumlah Komponen</label>
                                                     <div class="input-group qty-input">
-                                                        <button class="btn btn-outline-danger" type="button" onclick="decreaseValue('komponen_microcontroller')"><i class="fas fa-minus"></i></button>
-                                                        <input type="text" class="form-control text-center" id="komponen_microcontroller" value="0" oninput="validateInput('komponen_microcontroller')" onblur="validateInput('komponen_microcontroller')">
-                                                        <button class="btn btn-outline-success" type="button" onclick="increaseValue('komponen_microcontroller')"><i class="fas fa-plus"></i></button>
+                                                        <button class="btn btn-outline-danger btn-minus" type="button">
+                                                            <i class="fas fa-minus"></i>
+                                                        </button>
+                                                        <input type="text" class="form-control text-center qty-komponen" value="0" readonly>
+                                                        <button class="btn btn-outline-success btn-plus" type="button">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label class="form-label small">Jumlah Minggu</label>
                                                     <div class="input-group qty-input">
-                                                        <button class="btn btn-outline-danger" type="button" onclick="decreaseValue('minggu_microcontroller')"><i class="fas fa-minus"></i></button>
-                                                        <input type="text" class="form-control text-center" id="minggu_microcontroller" value="0" oninput="validateInput('minggu_microcontroller')" onblur="validateInput('minggu_microcontroller')">
-                                                        <button class="btn btn-outline-success" type="button" onclick="increaseValue('minggu_microcontroller')"><i class="fas fa-plus"></i></button>
+                                                        <button class="btn btn-outline-danger btn-minus" type="button">
+                                                            <i class="fas fa-minus"></i>
+                                                        </button>
+                                                        <input type="text" class="form-control text-center qty-minggu" value="0" readonly>
+                                                        <button class="btn btn-outline-success btn-plus" type="button">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        @endforeach
                                     </div> <!-- end row -->
                                 </div>
                             </div>
@@ -91,30 +103,50 @@
                             <div id="collapseSensor" class="accordion-collapse collapse" data-bs-parent="#komponenAccordion">
                                 <div class="accordion-body">
                                     <div class="row">
+                                    @foreach ($barangSensor as $d)
+                                    @php
+                                        $stok = $stokPerBarang[$d->id_nama_barang] ?? 0;
+                                    @endphp
                                         <div class="col-md-6 mb-3">
-                                            <span class="fw-medium d-block">DHT11 (Temperature & Humidity)</span>
-                                            <small class="text-muted">Rp. 20.000/Minggu</small>
+                                            <span class="fw-medium d-block">{{ $d->namaBarang->nama_barang ?? '-' }}</span>
+                                            <small class="text-muted me-2">
+                                                Rp. {{ number_format($d->harga_jual_barang, 0, ',', '.') }}/Minggu
+                                            </small>
+                                            @if (!empty($d->namaBarang->deskripsi))
+                                                <a href="{{ $d->namaBarang->deskripsi }}" target="_blank" class="btn btn-sm btn-primary">
+                                                    Detail
+                                                </a>
+                                            @endif
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="row">
+                                            <div class="row" data-nama="{{ $d->namaBarang->nama_barang }}" data-harga="{{ $d->harga_jual_barang }}" data-stok="{{ $stok }}">
                                                 <div class="col-md-6 mb-3">
                                                     <label class="form-label small">Jumlah Komponen</label>
                                                     <div class="input-group qty-input">
-                                                        <button class="btn btn-outline-danger" type="button" onclick="decreaseValue('komponen_sensor')"><i class="fas fa-minus"></i></button>
-                                                        <input type="text" class="form-control text-center" id="komponen_sensor" value="0" oninput="validateInput('komponen_sensor')" onblur="validateInput('komponen_sensor')">
-                                                        <button class="btn btn-outline-success" type="button" onclick="increaseValue('komponen_sensor')"><i class="fas fa-plus"></i></button>
+                                                        <button class="btn btn-outline-danger btn-minus" type="button">
+                                                            <i class="fas fa-minus"></i>
+                                                        </button>
+                                                        <input type="text" class="form-control text-center qty-komponen" value="0" readonly>
+                                                        <button class="btn btn-outline-success btn-plus" type="button">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label class="form-label small">Jumlah Minggu</label>
                                                     <div class="input-group qty-input">
-                                                        <button class="btn btn-outline-danger" type="button" onclick="decreaseValue('minggu_sensor')"><i class="fas fa-minus"></i></button>
-                                                        <input type="text" class="form-control text-center" id="minggu_sensor" value="0" oninput="validateInput('minggu_sensor')" onblur="validateInput('minggu_sensor')">
-                                                        <button class="btn btn-outline-success" type="button" onclick="increaseValue('minggu_sensor')"><i class="fas fa-plus"></i></button>
+                                                        <button class="btn btn-outline-danger btn-minus" type="button">
+                                                            <i class="fas fa-minus"></i>
+                                                        </button>
+                                                        <input type="text" class="form-control text-center qty-minggu" value="0" readonly>
+                                                        <button class="btn btn-outline-success btn-plus" type="button">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
@@ -131,30 +163,50 @@
                             <div id="collapseActuator" class="accordion-collapse collapse" data-bs-parent="#komponenAccordion">
                                 <div class="accordion-body">
                                     <div class="row">
+                                        @foreach ($barangActuator as $d)
+                                        @php
+                                            $stok = $stokPerBarang[$d->id_nama_barang] ?? 0;
+                                        @endphp
                                         <div class="col-md-6 mb-3">
-                                            <span class="fw-medium d-block">Servo Motor SG90</span>
-                                            <small class="text-muted">Rp. 30.000/Minggu</small>
+                                            <span class="fw-medium d-block">{{ $d->namaBarang->nama_barang ?? '-' }}</span>
+                                            <small class="text-muted me-2">
+                                                Rp. {{ number_format($d->harga_jual_barang, 0, ',', '.') }}/Minggu
+                                            </small>
+                                            @if (!empty($d->namaBarang->deskripsi))
+                                                <a href="{{ $d->namaBarang->deskripsi }}" target="_blank" class="btn btn-sm btn-primary">
+                                                    Detail
+                                                </a>
+                                            @endif
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="row">
+                                            <div class="row" data-nama="{{ $d->namaBarang->nama_barang }}" data-harga="{{ $d->harga_jual_barang }}" data-stok="{{ $stok }}">
                                                 <div class="col-md-6 mb-3">
                                                     <label class="form-label small">Jumlah Komponen</label>
                                                     <div class="input-group qty-input">
-                                                        <button class="btn btn-outline-danger" type="button" onclick="decreaseValue('komponen_actuator')"><i class="fas fa-minus"></i></button>
-                                                        <input type="text" class="form-control text-center" id="komponen_actuator" value="0" oninput="validateInput('komponen_actuator')" onblur="validateInput('komponen_actuator')">
-                                                        <button class="btn btn-outline-success" type="button" onclick="increaseValue('komponen_actuator')"><i class="fas fa-plus"></i></button>
+                                                        <button class="btn btn-outline-danger btn-minus" type="button">
+                                                            <i class="fas fa-minus"></i>
+                                                        </button>
+                                                        <input type="text" class="form-control text-center qty-komponen" value="0" readonly>
+                                                        <button class="btn btn-outline-success btn-plus" type="button">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label class="form-label small">Jumlah Minggu</label>
                                                     <div class="input-group qty-input">
-                                                        <button class="btn btn-outline-danger" type="button" onclick="decreaseValue('minggu_actuator')"><i class="fas fa-minus"></i></button>
-                                                        <input type="text" class="form-control text-center" id="minggu_actuator" value="0" oninput="validateInput('minggu_actuator')" onblur="validateInput('minggu_actuator')">
-                                                        <button class="btn btn-outline-success" type="button" onclick="increaseValue('minggu_actuator')"><i class="fas fa-plus"></i></button>
+                                                        <button class="btn btn-outline-danger btn-minus" type="button">
+                                                            <i class="fas fa-minus"></i>
+                                                        </button>
+                                                        <input type="text" class="form-control text-center qty-minggu" value="0" readonly>
+                                                        <button class="btn btn-outline-success btn-plus" type="button">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
@@ -171,30 +223,50 @@
                             <div id="collapsePower" class="accordion-collapse collapse" data-bs-parent="#komponenAccordion">
                                 <div class="accordion-body">
                                     <div class="row">
+                                        @foreach ($barangPower as $d)
+                                        @php
+                                            $stok = $stokPerBarang[$d->id_nama_barang] ?? 0;
+                                        @endphp
                                         <div class="col-md-6 mb-3">
-                                            <span class="fw-medium d-block">Battery Li-Ion 18650</span>
-                                            <small class="text-muted">Rp. 15.000/Minggu</small>
+                                            <span class="fw-medium d-block">{{ $d->namaBarang->nama_barang ?? '-' }}</span>
+                                            <small class="text-muted me-2">
+                                                Rp. {{ number_format($d->harga_jual_barang, 0, ',', '.') }}/Minggu
+                                            </small>
+                                            @if (!empty($d->namaBarang->deskripsi))
+                                                <a href="{{ $d->namaBarang->deskripsi }}" target="_blank" class="btn btn-sm btn-primary">
+                                                    Detail
+                                                </a>
+                                            @endif
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="row">
+                                            <div class="row" data-nama="{{ $d->namaBarang->nama_barang }}" data-harga="{{ $d->harga_jual_barang }}" data-stok="{{ $stok }}">
                                                 <div class="col-md-6 mb-3">
                                                     <label class="form-label small">Jumlah Komponen</label>
                                                     <div class="input-group qty-input">
-                                                        <button class="btn btn-outline-danger" type="button" onclick="decreaseValue('komponen_power')"><i class="fas fa-minus"></i></button>
-                                                        <input type="text" class="form-control text-center" id="komponen_power" value="0" oninput="validateInput('komponen_power')" onblur="validateInput('komponen_power')">
-                                                        <button class="btn btn-outline-success" type="button" onclick="increaseValue('komponen_power')"><i class="fas fa-plus"></i></button>
+                                                        <button class="btn btn-outline-danger btn-minus" type="button">
+                                                            <i class="fas fa-minus"></i>
+                                                        </button>
+                                                        <input type="text" class="form-control text-center qty-komponen" value="0" readonly>
+                                                        <button class="btn btn-outline-success btn-plus" type="button">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label class="form-label small">Jumlah Minggu</label>
                                                     <div class="input-group qty-input">
-                                                        <button class="btn btn-outline-danger" type="button" onclick="decreaseValue('minggu_power')"><i class="fas fa-minus"></i></button>
-                                                        <input type="text" class="form-control text-center" id="minggu_power" value="0" oninput="validateInput('minggu_power')" onblur="validateInput('minggu_power')">
-                                                        <button class="btn btn-outline-success" type="button" onclick="increaseValue('minggu_power')"><i class="fas fa-plus"></i></button>
+                                                        <button class="btn btn-outline-danger btn-minus" type="button">
+                                                            <i class="fas fa-minus"></i>
+                                                        </button>
+                                                        <input type="text" class="form-control text-center qty-minggu" value="0" readonly>
+                                                        <button class="btn btn-outline-success btn-plus" type="button">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
@@ -211,62 +283,67 @@
                             <div id="collapseEquipment" class="accordion-collapse collapse" data-bs-parent="#komponenAccordion">
                                 <div class="accordion-body">
                                     <div class="row">
+                                        @foreach ($barangEquipment as $d)
+                                        @php
+                                            $stok = $stokPerBarang[$d->id_nama_barang] ?? 0;
+                                        @endphp
                                         <div class="col-md-6 mb-3">
-                                            <span class="fw-medium d-block">Solder Listrik 40W</span>
-                                            <small class="text-muted">Rp. 25.000/Minggu</small>
+                                            <span class="fw-medium d-block">{{ $d->namaBarang->nama_barang ?? '-' }}</span>
+                                            <small class="text-muted me-2">
+                                                Rp. {{ number_format($d->harga_jual_barang, 0, ',', '.') }}/Minggu
+                                            </small>
+                                            @if (!empty($d->namaBarang->deskripsi))
+                                                <a href="{{ $d->namaBarang->deskripsi }}" target="_blank" class="btn btn-sm btn-primary">
+                                                    Detail
+                                                </a>
+                                            @endif
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="row">
+                                            <div class="row" data-nama="{{ $d->namaBarang->nama_barang }}" data-harga="{{ $d->harga_jual_barang }}" data-stok="{{ $stok }}">
                                                 <div class="col-md-6 mb-3">
                                                     <label class="form-label small">Jumlah Komponen</label>
                                                     <div class="input-group qty-input">
-                                                        <button class="btn btn-outline-danger" type="button" onclick="decreaseValue('komponen_equipment')"><i class="fas fa-minus"></i></button>
-                                                        <input type="text" class="form-control text-center" id="komponen_equipment" value="0" oninput="validateInput('komponen_equipment')" onblur="validateInput('komponen_equipment')">
-                                                        <button class="btn btn-outline-success" type="button" onclick="increaseValue('komponen_equipment')"><i class="fas fa-plus"></i></button>
+                                                        <button class="btn btn-outline-danger btn-minus" type="button">
+                                                            <i class="fas fa-minus"></i>
+                                                        </button>
+                                                        <input type="text" class="form-control text-center qty-komponen" value="0" readonly>
+                                                        <button class="btn btn-outline-success btn-plus" type="button">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label class="form-label small">Jumlah Minggu</label>
                                                     <div class="input-group qty-input">
-                                                        <button class="btn btn-outline-danger" type="button" onclick="decreaseValue('minggu_equipment')"><i class="fas fa-minus"></i></button>
-                                                        <input type="text" class="form-control text-center" id="minggu_equipment" value="0" oninput="validateInput('minggu_equipment')" onblur="validateInput('minggu_equipment')">
-                                                        <button class="btn btn-outline-success" type="button" onclick="increaseValue('minggu_equipment')"><i class="fas fa-plus"></i></button>
+                                                        <button class="btn btn-outline-danger btn-minus" type="button">
+                                                            <i class="fas fa-minus"></i>
+                                                        </button>
+                                                        <input type="text" class="form-control text-center qty-minggu" value="0" readonly>
+                                                        <button class="btn btn-outline-success btn-plus" type="button">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
+
+                    <input type="hidden" name="penyewaan" id="inputPenyewaan">
 
                     <div class="alert-total text-center fw-bold mt-4 mb-4">
                         <i class="fas fa-shopping-cart me-2"></i> Total Harga: Rp. 0
                     </div>
 
+                    <input type="hidden" name="total_harga" id="inputTotalHarga">
+
                     <button type="button" class="btn btn-warning w-100 mb-3 py-2" data-bs-toggle="modal" data-bs-target="#qrisModal">
                         <i class="fas fa-qrcode me-2"></i> QRIS
                     </button>
-                    <!-- Modal Konfirmasi Sebelum Kirim -->
-                    <div class="modal fade" id="confirmSubmitModal" tabindex="-1" aria-labelledby="confirmSubmitModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content border-0 shadow">
-                                <div class="modal-header bg-warning text-white">
-                                    <h5 class="modal-title" id="confirmSubmitModalLabel"><i class="fas fa-question-circle me-2"></i>Konfirmasi Pesanan</h5>
-                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                                </div>
-                                <div class="modal-body text-center">
-                                    <p class="mb-0">Apakah Anda yakin ingin menyelesaikan pesanan ini?</p>
-                                </div>
-                                <div class="modal-footer justify-content-center">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                    <button type="button" class="btn btn-success" id="confirmSubmitBtn">Ya, Lanjutkan</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     <!-- QRIS Modal -->
                     <div class="modal fade" id="qrisModal" tabindex="-1" aria-labelledby="qrisModalLabel" aria-hidden="true">
@@ -278,26 +355,24 @@
                                 </div>
                                 <div class="modal-body text-center p-4">
                                     <img src="{{ asset('images/qris.png') }}" alt="QRIS Code" class="img-fluid mx-auto d-block mb-3" style="width: 70%;">
-                                    <p class="mb-0 text-muted">Scan kode QR menggunakan aplikasi e-wallet Anda</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                    <p class="mb-0 text-muted">Scan QR Code menggunakan aplikasi e-wallet/m-banking Anda.</p>
+                                    <p class="mb-0 text-muted">Bayar sesuai total harga yang tertera.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Upload Bukti Bayar -->
-                    <label class="btn upload-btn w-100 position-relative">
+                    <label class="btn upload-btn w-100 position-relative mb-3">
                         <i class="fas fa-upload me-2"></i> Upload Bukti Bayar
-                        <input type="file" name="bukti_bayar" class="d-none">
+                        <input type="file" name="bukti_pembayaran_penyewa" id="bukti_pembayaran_penyewa" class="d-none">
                         <span class="file-name d-block mt-2 small text-muted">Belum ada file dipilih</span>
                     </label>
 
-                    <!-- Upload KTM/KTP -->
-                    <label class="btn upload-btn w-100 position-relative mt-3">
-                        <i class="fas fa-id-card me-2"></i> Upload KTM/KTP
-                        <input type="file" name="ktm_ktp" class="d-none" accept=".jpg,.jpeg,.png,.pdf">
+                    <!-- Upload Bukti Identitas -->
+                    <label class="btn upload-btn w-100 position-relative">
+                        <i class="fas fa-upload me-2"></i> Upload Kartu Pelajar/KTM/KTP
+                        <input type="file" name="bukti_identitas_penyewa" id="bukti_identitas_penyewa" class="d-none">
                         <span class="file-name d-block mt-2 small text-muted">Belum ada file dipilih</span>
                     </label>
 
@@ -305,15 +380,15 @@
                         <p class="mb-2 fw-medium">Metode Pengiriman:</p>
                         <div class="d-flex flex-wrap gap-3">
                             <div class="form-check shipping-option ps-0">
-                                <input class="form-check-input" type="radio" name="pengiriman" value="diantar" id="diantar">
-                                <label class="form-check-label d-flex align-items-center p-2" for="diantar">
-                                    <i class="fas fa-truck me-2 text-primary"></i> Pesanan Diantar
+                                <input class="form-check-input" type="radio" name="pengambilan_barang_penyewa" value="Pesanan Diantar" id="pengambilan_barang_penyewa">
+                                <label class="form-check-label d-flex align-items-center bg-primary text-white p-2 w-100" for="pengambilan_barang_penyewa">
+                                    <i class="fas fa-truck me-2 text-white"></i> Pesanan Diantar
                                 </label>
                             </div>
                             <div class="form-check shipping-option ps-0">
-                                <input class="form-check-input" type="radio" name="pengiriman" value="ambil" id="ambil">
-                                <label class="form-check-label d-flex align-items-center p-2" for="ambil">
-                                    <i class="fas fa-store me-2 text-primary"></i> Ambil di Toko
+                                <input class="form-check-input" type="radio" name="pengambilan_barang_penyewa" value="Ambil di Toko" id="pengambilan_barang_penyewa">
+                                <label class="form-check-label d-flex align-items-center bg-primary text-white p-2 w-100" for="pengambilan_barang_penyewa">
+                                    <i class="fas fa-store me-2 text-white"></i> Ambil di Toko
                                 </label>
                             </div>
                         </div>
@@ -322,6 +397,25 @@
                     <button type="submit" class="btn btn-success submit-btn w-100 mt-3">
                         <i class="fas fa-paper-plane me-2"></i> KIRIM PESANAN
                     </button>
+
+                    <!-- Modal Konfirmasi Sebelum Kirim -->
+                    <div class="modal fade" id="confirmSubmitModal" tabindex="-1" aria-labelledby="confirmSubmitModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content border-0 shadow">
+                                <div class="modal-header bg-warning text-white">
+                                    <h5 class="modal-title" id="confirmSubmitModalLabel"><i class="fas fa-question-circle me-2"></i>Konfirmasi Pesanan</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                                </div>
+                                <div class="modal-body text-center">
+                                    <p class="mb-0">Apakah Anda yakin ingin menyelesaikan pesanan ini?</p>
+                                </div>
+                                <div class="modal-footer justify-content-center gap-3 flex-wrap">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                    <button type="button" class="btn btn-success" id="confirmSubmitBtn">Ya, Lanjutkan</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Modal Konfirmasi WhatsApp -->
                     <div class="modal fade" id="pesananModal" tabindex="-1" aria-labelledby="pesananModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -341,11 +435,29 @@
                                         <i class="fas fa-truck me-2"></i> Pengambilan: Diantar / Ambil di Toko
                                     </small>
                                 </div>
-                                <div class="modal-footer d-flex justify-content-center">
-                                    <button type="button" id="backToOrderBtn" class="btn btn-secondary">
-                                        <i class="fas fa-rotate-left me-2"></i> Kembali ke Form
+                                <div class="modal-footer d-flex justify-content-center gap-3 flex-wrap">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                        <i class="fas fa-times me-2"></i> Tutup
                                     </button>
-                                    <a id="whatsappLink" href="#" target="_blank" class="btn btn-success"><i class="fab fa-whatsapp me-2"></i>Konfirmasi Pemesanan</a>
+                                    <a id="whatsappLink" href="#" target="_blank" class="btn btn-success">
+                                        <i class="fab fa-whatsapp me-2"></i> Konfirmasi Pemesanan
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal Error -->
+                    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content border-0 shadow">
+                                <div class="modal-header bg-danger text-white">
+                                    <h5 class="modal-title" id="errorModalLabel"><i class="fas fa-times-circle me-3"></i> Gagal Mengirim</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                                </div>
+                                <div class="modal-body text-center">
+                                    <p class="mb-0">Pesanan gagal dikirim.</p>
+                                    <p class="mb-0">Silahkan kembali buat pesanan dan cek kembali pesanan Anda.</p>
                                 </div>
                             </div>
                         </div>
@@ -355,136 +467,181 @@
         </div>
     </div>
 
-    <script>
-    function increaseValue(id) {
-        let input = document.getElementById(id);
-        let value = parseInt(input.value) || 0;
-        input.value = value + 1;
-    }
+@if(session('success'))
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const modal = new bootstrap.Modal(document.getElementById('pesananModal'));
+    modal.show();
 
-    function decreaseValue(id) {
-        let input = document.getElementById(id);
-        let value = parseInt(input.value) || 0;
-        if (value > 0) {
-            input.value = value - 1;
+    // Ambil data dari sessionStorage
+    const nama = sessionStorage.getItem('wa_nama') || '(Nama belum diisi)';
+    const alamat = sessionStorage.getItem('wa_alamat') || '(Alamat belum diisi)';
+    const pengambilan = sessionStorage.getItem('wa_pengambilan') || '(Metode belum dipilih)';
+
+    // Format pesan
+    const message = `Halo Admin, saya ingin konfirmasi pesanan.\n\n` +
+                    `Nama: ${nama}\n` +
+                    `Alamat: ${alamat}\n` +
+                    `Pengambilan: ${pengambilan}`;
+
+    // Set href WhatsApp
+    const waLink = document.getElementById('whatsappLink');
+    waLink.href = `https://wa.me/6281356565025?text=${encodeURIComponent(message)}`;
+
+    // Bersihkan sessionStorage agar tidak tersisa
+    sessionStorage.removeItem('wa_nama');
+    sessionStorage.removeItem('wa_alamat');
+    sessionStorage.removeItem('wa_pengambilan');
+});
+</script>
+@endif
+
+@if(session('error'))
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+        errorModal.show();
+    });
+</script>
+@endif
+
+<script>
+    // Event delegation untuk tombol plus dan minus
+    document.addEventListener('DOMContentLoaded', function () {
+        function updateTotalHargaDanPenyewaan() {
+            let total = 0;
+            let penyewaanList = [];
+
+            document.querySelectorAll('.row[data-nama]').forEach(function (group) {
+                const nama = group.dataset.nama;
+                const harga = parseInt(group.dataset.harga) || 0;
+                const stok = parseInt(group.dataset.stok) || 0;
+
+                const qtyKomponenInput = group.querySelector('.qty-komponen');
+                const qtyMingguInput = group.querySelector('.qty-minggu');
+
+                const jumlahKomponen = parseInt(qtyKomponenInput.value) || 0;
+                const jumlahMinggu = parseInt(qtyMingguInput.value) || 0;
+
+                if (jumlahKomponen > 0 && jumlahMinggu > 0) {
+                    const subtotal = jumlahKomponen * jumlahMinggu * harga;
+                    total += subtotal;
+                    penyewaanList.push(`${nama}: ${jumlahKomponen}, Jumlah Minggu: ${jumlahMinggu}.`);
+                }
+            });
+
+            // Format rupiah
+            const formatter = new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            });
+
+            document.querySelector('.alert-total').innerHTML =
+                `<i class="fas fa-shopping-cart me-2"></i> Total Harga: ${formatter.format(total)}`;
+
+            document.getElementById('inputPenyewaan').value = penyewaanList.join(', ');
+            document.getElementById('inputTotalHarga').value = total;
         }
-    }
 
-    function validateInput(id) {
-        let input = document.getElementById(id);
-        let value = input.value;
+        // Tombol untuk komponen
+        document.querySelectorAll('.qty-komponen').forEach(function (input) {
+            const group = input.closest('[data-nama]');
+            const stok = parseInt(group.dataset.stok) || 0;
 
-        value = value.replace(/[^0-9]/g, '');
+            const minusBtn = group.querySelectorAll('.btn-minus')[0];
+            const plusBtn = group.querySelectorAll('.btn-plus')[0];
 
-        let number = parseInt(value);
+            minusBtn.addEventListener('click', function () {
+                let val = parseInt(input.value);
+                if (val > 0) {
+                    input.value = val - 1;
+                    updateTotalHargaDanPenyewaan();
+                }
+            });
 
-        if (isNaN(number) || number < 0) {
-            input.value = 0;
-        } else {
-            input.value = number;
+            plusBtn.addEventListener('click', function () {
+                let val = parseInt(input.value);
+                if (val < stok) {
+                    input.value = val + 1;
+                    updateTotalHargaDanPenyewaan();
+                }
+            });
+        });
+
+        // Tombol untuk minggu (tanpa batasan)
+        document.querySelectorAll('.qty-minggu').forEach(function (input) {
+            const group = input.closest('[data-nama]');
+            const minusBtn = group.querySelectorAll('.btn-minus')[1];
+            const plusBtn = group.querySelectorAll('.btn-plus')[1];
+
+            minusBtn.addEventListener('click', function () {
+                let val = parseInt(input.value);
+                if (val > 0) {
+                    input.value = val - 1;
+                    updateTotalHargaDanPenyewaan();
+                }
+            });
+
+            plusBtn.addEventListener('click', function () {
+                let val = parseInt(input.value);
+                input.value = val + 1;
+                updateTotalHargaDanPenyewaan();
+            });
+        });
+
+        // Hitung ulang sebelum submit
+        const form = document.querySelector('form');
+        if (form) {
+            form.addEventListener('submit', function () {
+                updateTotalHargaDanPenyewaan();
+            });
         }
-    }
 
-    document.querySelector('input[type="file"]').addEventListener('change', function(e) {
-        const fileName = e.target.files[0] ? e.target.files[0].name : 'Belum ada file dipilih';
-        e.target.parentElement.querySelector('.file-name').textContent = fileName;
+        updateTotalHargaDanPenyewaan();
+    });
+
+    document.querySelectorAll('input[type="file"]').forEach(function (input) {
+        input.addEventListener('change', function (e) {
+            const fileName = e.target.files[0] ? e.target.files[0].name : 'Belum ada file dipilih';
+            e.target.parentElement.querySelector('.file-name').textContent = fileName;
+        });
+    });
+
+    confirmSubmitBtn.addEventListener('click', function () {
+        document.querySelector('form').submit(); // Kirim form Laravel
     });
 
     document.addEventListener('DOMContentLoaded', function () {
-    let tempData = {}; // Data disimpan sementara
+        const submitBtn = document.querySelector('.submit-btn');
+        const confirmSubmitBtn = document.getElementById('confirmSubmitBtn');
+        const confirmModalElement = document.getElementById('confirmSubmitModal');
+        const form = document.querySelector('form');
 
-    // Saat tombol "KIRIM PESANAN" diklik
-    document.querySelector('.submit-btn').addEventListener('click', function (event) {
-        event.preventDefault();
-
-        let nama = document.getElementById('nama').value;
-        let alamat = document.getElementById('alamat').value;
-        let pengiriman = document.querySelector('input[name="pengiriman"]:checked')?.value || "Belum Dipilih";
-
-        if (!nama || !alamat || pengiriman === "Belum Dipilih") {
-            alert("Harap lengkapi semua data sebelum mengirim!");
-            return;
-        }
-
-        // Simpan data untuk nanti
-        tempData = { nama, alamat, pengiriman };
-
-        // Tampilkan modal konfirmasi custom
-        let confirmModal = new bootstrap.Modal(document.getElementById('confirmSubmitModal'));
-        confirmModal.show();
-    });
-
-    // Ketika user klik "Ya, Lanjutkan" di modal konfirmasi
-    document.getElementById('confirmSubmitBtn').addEventListener('click', function () {
-        let { nama, alamat, pengiriman } = tempData;
-
-        let message = `Halo Admin, saya ingin konfirmasi pesanan.\n\nNama: ${nama}\nAlamat: ${alamat}\nPengambilan: ${pengiriman}`;
-        let whatsappURL = `https://wa.me/6281293768288?text=${encodeURIComponent(message)}`;
-
-        document.getElementById('whatsappLink').href = whatsappURL;
-
-        // Tutup modal konfirmasi
-        bootstrap.Modal.getInstance(document.getElementById('confirmSubmitModal')).hide();
-
-        // Tampilkan modal konfirmasi WhatsApp
-        let pesananModal = new bootstrap.Modal(document.getElementById('pesananModal'));
-        pesananModal.show();
-    });
-
-    document.querySelector('#pesananModal .btn-close').addEventListener('click', function () {
-    setTimeout(() => {
-        location.reload();
-    }, 300); // kasih jeda sedikit agar animasi modal selesai
-});
-
-    document.getElementById('backToOrderBtn').addEventListener('click', function () {
-    location.reload(); // Reload halaman
-});
-
-    // Saat klik WhatsApp
-    document.getElementById('whatsappLink').addEventListener('click', function () {
-        bootstrap.Modal.getInstance(document.getElementById('pesananModal')).hide();
-    });
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Wait a short moment to ensure all elements are fully loaded
-    setTimeout(function() {
-        console.log("Attempting to find KTM/KTP input with delay");
-
-        // Try to get all file inputs and find the right one
-        const allFileInputs = document.querySelectorAll('input[type="file"]');
-        console.log("Found", allFileInputs.length, "file inputs on page");
-
-        allFileInputs.forEach(function(input, index) {
-            console.log(`File input #${index}:`, input.name, input);
-
-            // Check if this is our KTM/KTP input
-            if (input.name === "ktm_ktp") {
-                console.log("Found KTM/KTP input, attaching event listener");
-
-                input.addEventListener('change', function() {
-                    console.log("File changed event triggered");
-                    const fileName = this.files[0] ? this.files[0].name : 'Belum ada file dipilih';
-                    const label = this.closest('label');
-
-                    if (label) {
-                        const fileNameDisplay = label.querySelector('.file-name');
-                        if (fileNameDisplay) {
-                            fileNameDisplay.textContent = fileName;
-                            console.log("Updated file name display to:", fileName);
-                        } else {
-                            console.error("Could not find .file-name element inside label");
-                        }
-                    } else {
-                        console.error("Could not find parent label element");
-                    }
-                });
-            }
+        // Step 1: Tampilkan modal konfirmasi
+        submitBtn.addEventListener('click', function (event) {
+            event.preventDefault();
+            const confirmModal = new bootstrap.Modal(confirmModalElement);
+            confirmModal.show();
         });
-    }, 500); // 500ms delay
-});
 
-    </script>
+        // Step 2: Simpan data ke sessionStorage lalu submit form
+        confirmSubmitBtn.addEventListener('click', function () {
+            // Ambil data dari input sebelum submit
+            const nama = document.getElementById('nama_penyewa')?.value.trim() || '(Nama belum diisi)';
+            const alamat = document.getElementById('alamat_penyewa')?.value.trim() || '(Alamat belum diisi)';
+            const pengambilan = document.querySelector('input[name="pengambilan_barang_penyewa"]:checked')?.value || '(Metode belum dipilih)';
+
+            // Simpan ke sessionStorage
+            sessionStorage.setItem('wa_nama', nama);
+            sessionStorage.setItem('wa_alamat', alamat);
+            sessionStorage.setItem('wa_pengambilan', pengambilan);
+
+            // Submit form
+            form.submit();
+        });
+    });
+</script>
+
 </body>
 </html>

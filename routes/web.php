@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PenyewaanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,8 +14,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-});
-
-Route::post('/penyewaan', [PenyewaanController::class, 'store'])->name('penyewaan.store');
+Route::get('/', [PenyewaanController::class, 'index'])->name('penyewaan.index');
+Route::post('/pesanan', [PenyewaanController::class, 'store'])->name('penyewaan.store');
