@@ -48,7 +48,7 @@
                                         @php
                                             $stok = $stokPerBarang[$d->id_nama_barang] ?? 0;
                                         @endphp
-                                        <div class="col-md-6 mb-3">
+                                        <div class="col-md-6">
                                             <span class="fw-medium d-block">{{ $d->namaBarang->nama_barang ?? '-' }}</span>
                                             <small class="text-muted">
                                                 Rp. {{ number_format($d->harga_jual_barang, 0, ',', '.') }}/Minggu
@@ -59,9 +59,9 @@
                                                 </a>
                                             @endif
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-6 mb-3">
                                             <div class="row" data-nama="{{ $d->namaBarang->nama_barang }}" data-harga="{{ $d->harga_jual_barang }}" data-stok="{{ $stok }}">
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-md-6">
                                                     <label class="form-label small">Jumlah Komponen</label>
                                                     <div class="input-group qty-input">
                                                         <button class="btn btn-outline-danger btn-minus" type="button">
@@ -108,7 +108,7 @@
                                     @php
                                         $stok = $stokPerBarang[$d->id_nama_barang] ?? 0;
                                     @endphp
-                                        <div class="col-md-6 mb-3">
+                                        <div class="col-md-6">
                                             <span class="fw-medium d-block">{{ $d->namaBarang->nama_barang ?? '-' }}</span>
                                             <small class="text-muted">
                                                 Rp. {{ number_format($d->harga_jual_barang, 0, ',', '.') }}/Minggu
@@ -119,9 +119,9 @@
                                                 </a>
                                             @endif
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-6 mb-3">
                                             <div class="row" data-nama="{{ $d->namaBarang->nama_barang }}" data-harga="{{ $d->harga_jual_barang }}" data-stok="{{ $stok }}">
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-md-6">
                                                     <label class="form-label small">Jumlah Komponen</label>
                                                     <div class="input-group qty-input">
                                                         <button class="btn btn-outline-danger btn-minus" type="button">
@@ -168,7 +168,7 @@
                                         @php
                                             $stok = $stokPerBarang[$d->id_nama_barang] ?? 0;
                                         @endphp
-                                        <div class="col-md-6 mb-3">
+                                        <div class="col-md-6">
                                             <span class="fw-medium d-block">{{ $d->namaBarang->nama_barang ?? '-' }}</span>
                                             <small class="text-muted">
                                                 Rp. {{ number_format($d->harga_jual_barang, 0, ',', '.') }}/Minggu
@@ -179,9 +179,9 @@
                                                 </a>
                                             @endif
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-6 mb-3">
                                             <div class="row" data-nama="{{ $d->namaBarang->nama_barang }}" data-harga="{{ $d->harga_jual_barang }}" data-stok="{{ $stok }}">
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-md-6">
                                                     <label class="form-label small">Jumlah Komponen</label>
                                                     <div class="input-group qty-input">
                                                         <button class="btn btn-outline-danger btn-minus" type="button">
@@ -228,7 +228,7 @@
                                         @php
                                             $stok = $stokPerBarang[$d->id_nama_barang] ?? 0;
                                         @endphp
-                                        <div class="col-md-6 mb-3">
+                                        <div class="col-md-6">
                                             <span class="fw-medium d-block">{{ $d->namaBarang->nama_barang ?? '-' }}</span>
                                             <small class="text-muted">
                                                 Rp. {{ number_format($d->harga_jual_barang, 0, ',', '.') }}/Minggu
@@ -239,9 +239,9 @@
                                                 </a>
                                             @endif
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-6 mb-3">
                                             <div class="row" data-nama="{{ $d->namaBarang->nama_barang }}" data-harga="{{ $d->harga_jual_barang }}" data-stok="{{ $stok }}">
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-md-6">
                                                     <label class="form-label small">Jumlah Komponen</label>
                                                     <div class="input-group qty-input">
                                                         <button class="btn btn-outline-danger btn-minus" type="button">
@@ -288,7 +288,7 @@
                                         @php
                                             $stok = $stokPerBarang[$d->id_nama_barang] ?? 0;
                                         @endphp
-                                        <div class="col-md-6 mb-3">
+                                        <div class="col-md-6">
                                             <span class="fw-medium d-block">{{ $d->namaBarang->nama_barang ?? '-' }}</span>
                                             <small class="text-muted">
                                                 Rp. {{ number_format($d->harga_jual_barang, 0, ',', '.') }}/Minggu
@@ -299,9 +299,9 @@
                                                 </a>
                                             @endif
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-6 mb-3">
                                             <div class="row" data-nama="{{ $d->namaBarang->nama_barang }}" data-harga="{{ $d->harga_jual_barang }}" data-stok="{{ $stok }}">
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-md-6">
                                                     <label class="form-label small">Jumlah Komponen</label>
                                                     <div class="input-group qty-input">
                                                         <button class="btn btn-outline-danger btn-minus" type="button">
