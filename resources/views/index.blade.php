@@ -61,7 +61,7 @@
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <div class="row" data-nama="{{ $d->namaBarang->nama_barang }}" data-harga="{{ $d->harga_jual_barang }}" data-stok="{{ $stok }}">
-                                                <div class="col-md-6">
+                                                <div class="col-md-6 mb-1">
                                                     <label class="form-label small">Jumlah Komponen</label>
                                                     <div class="input-group qty-input">
                                                         <button class="btn btn-outline-danger btn-minus" type="button">
@@ -121,7 +121,7 @@
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <div class="row" data-nama="{{ $d->namaBarang->nama_barang }}" data-harga="{{ $d->harga_jual_barang }}" data-stok="{{ $stok }}">
-                                                <div class="col-md-6">
+                                                <div class="col-md-6 mb-1">
                                                     <label class="form-label small">Jumlah Komponen</label>
                                                     <div class="input-group qty-input">
                                                         <button class="btn btn-outline-danger btn-minus" type="button">
@@ -181,7 +181,7 @@
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <div class="row" data-nama="{{ $d->namaBarang->nama_barang }}" data-harga="{{ $d->harga_jual_barang }}" data-stok="{{ $stok }}">
-                                                <div class="col-md-6">
+                                                <div class="col-md-6 mb-1">
                                                     <label class="form-label small">Jumlah Komponen</label>
                                                     <div class="input-group qty-input">
                                                         <button class="btn btn-outline-danger btn-minus" type="button">
@@ -241,7 +241,7 @@
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <div class="row" data-nama="{{ $d->namaBarang->nama_barang }}" data-harga="{{ $d->harga_jual_barang }}" data-stok="{{ $stok }}">
-                                                <div class="col-md-6">
+                                                <div class="col-md-6 mb-1">
                                                     <label class="form-label small">Jumlah Komponen</label>
                                                     <div class="input-group qty-input">
                                                         <button class="btn btn-outline-danger btn-minus" type="button">
@@ -301,7 +301,7 @@
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <div class="row" data-nama="{{ $d->namaBarang->nama_barang }}" data-harga="{{ $d->harga_jual_barang }}" data-stok="{{ $stok }}">
-                                                <div class="col-md-6">
+                                                <div class="col-md-6 mb-1">
                                                     <label class="form-label small">Jumlah Komponen</label>
                                                     <div class="input-group qty-input">
                                                         <button class="btn btn-outline-danger btn-minus" type="button">
