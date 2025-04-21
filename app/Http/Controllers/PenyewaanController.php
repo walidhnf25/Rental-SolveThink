@@ -36,7 +36,7 @@ class PenyewaanController extends Controller
                 'pengambilan_barang_penyewa' => 'required|string',
                 'penyewaan' => 'required|string',
                 'total_harga' => 'required|numeric',
-                'bukti_pembayaran_penyewa' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+                'bukti_pembayaran_penyewa' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
                 'bukti_identitas_penyewa' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
             ]);
 

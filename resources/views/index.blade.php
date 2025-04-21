@@ -4,15 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Penyewaan Komponen Elektronika</title>
+    <link rel="icon" type="image/png" sizes="64x64" href="{{ asset('images/st_ico.png') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('style.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <body>
     <div class="container mt-5 mb-5">
-        <div class="card border-0 mx-auto" style="max-width: 700px;">
+        <div class="card border-0 mx-auto" style="max-width: 720px;">
             <div class="card-header text-white text-center">
-                <h4 class="mb-0 fw-bold">Penyewaan Komponen Elektronika</h4>
+                <h4 class="mb-0 fw-bold">Penyewaan Komponen Elektronika - SolveThink</h4>
             </div>
             <div class="card-body p-4">
                 <form action="{{ route('penyewaan.store') }}" method="POST" enctype="multipart/form-data">
@@ -34,7 +35,7 @@
                         <!-- Komponen: Microcontroller -->
                         <div class="accordion-item border-0 shadow-sm">
                             <h2 class="accordion-header">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#collapseMicrocontroller" aria-expanded="false" aria-controls="collapseMicrocontroller">
                                     <i class="fas fa-microchip me-2"></i> Microcontroller
                                 </button>
@@ -49,7 +50,7 @@
                                         @endphp
                                         <div class="col-md-6 mb-3">
                                             <span class="fw-medium d-block">{{ $d->namaBarang->nama_barang ?? '-' }}</span>
-                                            <small class="text-muted me-2">
+                                            <small class="text-muted">
                                                 Rp. {{ number_format($d->harga_jual_barang, 0, ',', '.') }}/Minggu
                                             </small>
                                             @if (!empty($d->namaBarang->deskripsi))
@@ -109,7 +110,7 @@
                                     @endphp
                                         <div class="col-md-6 mb-3">
                                             <span class="fw-medium d-block">{{ $d->namaBarang->nama_barang ?? '-' }}</span>
-                                            <small class="text-muted me-2">
+                                            <small class="text-muted">
                                                 Rp. {{ number_format($d->harga_jual_barang, 0, ',', '.') }}/Minggu
                                             </small>
                                             @if (!empty($d->namaBarang->deskripsi))
@@ -169,7 +170,7 @@
                                         @endphp
                                         <div class="col-md-6 mb-3">
                                             <span class="fw-medium d-block">{{ $d->namaBarang->nama_barang ?? '-' }}</span>
-                                            <small class="text-muted me-2">
+                                            <small class="text-muted">
                                                 Rp. {{ number_format($d->harga_jual_barang, 0, ',', '.') }}/Minggu
                                             </small>
                                             @if (!empty($d->namaBarang->deskripsi))
@@ -229,7 +230,7 @@
                                         @endphp
                                         <div class="col-md-6 mb-3">
                                             <span class="fw-medium d-block">{{ $d->namaBarang->nama_barang ?? '-' }}</span>
-                                            <small class="text-muted me-2">
+                                            <small class="text-muted">
                                                 Rp. {{ number_format($d->harga_jual_barang, 0, ',', '.') }}/Minggu
                                             </small>
                                             @if (!empty($d->namaBarang->deskripsi))
@@ -289,7 +290,7 @@
                                         @endphp
                                         <div class="col-md-6 mb-3">
                                             <span class="fw-medium d-block">{{ $d->namaBarang->nama_barang ?? '-' }}</span>
-                                            <small class="text-muted me-2">
+                                            <small class="text-muted">
                                                 Rp. {{ number_format($d->harga_jual_barang, 0, ',', '.') }}/Minggu
                                             </small>
                                             @if (!empty($d->namaBarang->deskripsi))
@@ -335,13 +336,15 @@
 
                     <input type="hidden" name="penyewaan" id="inputPenyewaan">
 
-                    <div class="alert-total text-center fw-bold mt-4 mb-4">
+                    <div class="alert-total text-center fw-bold mt-3 mb-1">
                         <i class="fas fa-shopping-cart me-2"></i> Total Harga: Rp. 0
                     </div>
+                    <i class="class">*Harga belum termasuk ongkir jika di luar Telkom University Bandung (Sukabirus dan Sukapura)</i><br>
+                    <i class="class">*Ongkir akan diberitahu oleh admin kami setelah melakukan pemesanan</i><br>
 
                     <input type="hidden" name="total_harga" id="inputTotalHarga">
 
-                    <button type="button" class="btn btn-warning w-100 mb-3 py-2" data-bs-toggle="modal" data-bs-target="#qrisModal">
+                    <button type="button" class="btn btn-warning w-100 mb-3 py-2 mt-3" data-bs-toggle="modal" data-bs-target="#qrisModal">
                         <i class="fas fa-qrcode me-2"></i> QRIS
                     </button>
 
@@ -363,14 +366,15 @@
                     </div>
 
                     <!-- Upload Bukti Bayar -->
-                    <label class="btn upload-btn w-100 position-relative mb-3">
+                    <label class="btn upload-btn w-100 position-relative mb-1">
                         <i class="fas fa-upload me-2"></i> Upload Bukti Bayar
                         <input type="file" name="bukti_pembayaran_penyewa" id="bukti_pembayaran_penyewa" class="d-none">
                         <span class="file-name d-block mt-2 small text-muted">Belum ada file dipilih</span>
                     </label>
+                    <i class="class">*Kosongkan jika pembayaran melalui cash</i>
 
                     <!-- Upload Bukti Identitas -->
-                    <label class="btn upload-btn w-100 position-relative">
+                    <label class="btn upload-btn w-100 position-relative mt-3">
                         <i class="fas fa-upload me-2"></i> Upload Kartu Pelajar/KTM/KTP
                         <input type="file" name="bukti_identitas_penyewa" id="bukti_identitas_penyewa" class="d-none">
                         <span class="file-name d-block mt-2 small text-muted">Belum ada file dipilih</span>
@@ -381,13 +385,13 @@
                         <div class="d-flex flex-wrap gap-3">
                             <div class="form-check shipping-option ps-0">
                                 <input class="form-check-input" type="radio" name="pengambilan_barang_penyewa" value="Pesanan Diantar" id="pengambilan_barang_penyewa">
-                                <label class="form-check-label d-flex align-items-center bg-primary text-white p-2 w-100" for="pengambilan_barang_penyewa">
+                                <label class="form-check-label d-flex align-items-center bg-primary text-white p-2" style="width: 200px;" for="pengambilan_barang_penyewa">
                                     <i class="fas fa-truck me-2 text-white"></i> Pesanan Diantar
                                 </label>
                             </div>
                             <div class="form-check shipping-option ps-0">
                                 <input class="form-check-input" type="radio" name="pengambilan_barang_penyewa" value="Ambil di Toko" id="pengambilan_barang_penyewa">
-                                <label class="form-check-label d-flex align-items-center bg-primary text-white p-2 w-100" for="pengambilan_barang_penyewa">
+                                <label class="form-check-label d-flex align-items-center bg-primary text-white p-2" style="width: 200px;" for="pengambilan_barang_penyewa">
                                     <i class="fas fa-store me-2 text-white"></i> Ambil di Toko
                                 </label>
                             </div>
@@ -479,7 +483,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const pengambilan = sessionStorage.getItem('wa_pengambilan') || '(Metode belum dipilih)';
 
     // Format pesan
-    const message = `Halo Admin, saya ingin konfirmasi pesanan.\n\n` +
+    const message = `Halo Admin, saya ingin konfirmasi pesanan penyewaan komponen elektronika.\n\n` +
                     `Nama: ${nama}\n` +
                     `Alamat: ${alamat}\n` +
                     `Pengambilan: ${pengambilan}`;
