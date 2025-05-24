@@ -20,3 +20,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/penyewaan-komponen-solvethink', [PenyewaanApiController::class, 'index']);
+Route::get('/penyewaan-komponen-solvethink/{id}', [PenyewaanApiController::class, 'show']);
+Route::put('/penyewaan-komponen-solvethink/{id}', [PenyewaanApiController::class, 'update']);
