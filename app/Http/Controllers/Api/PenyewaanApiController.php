@@ -84,4 +84,31 @@ class PenyewaanApiController extends Controller
             'data' => $penyewaan
         ], 200);
     }
+
+    public function destroy($id)
+    {
+        $penyewaan = Penyewaan::find($id);
+
+        if (!$penyewaan) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data penyewaan tidak ditemukan',
+            ], 404);
+        }
+
+        try {
+            $penyewaan->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data penyewaan berhasil dihapus',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat menghapus data',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }
